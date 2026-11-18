@@ -1,0 +1,350 @@
+[2026-11-18 11:33:48 UTC] xrun -Q -unbuffered '-access' '+rw' design.sv testbench.sv  
+TOOL:	xrun	25.03-s001: Started on Nov 18, 2026 at 06:33:49 EST
+xrun: 25.03-s001: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
+	Top level design units:
+		$unit_0x50184b01
+		apb_i2c_sv_tb
+        .cmd      (bit_cmd),
+                         |
+xmelab: *W,CUVMPW (./design.sv,167|25): port sizes differ in port connection(1/4) for the instance(apb_i2c_sv_tb.DUT) .
+        .bit_cmd  (bit_cmd),
+                         |
+xmelab: *W,CUVMPW (./design.sv,191|25): port sizes differ in port connection(1/4) for the instance(apb_i2c_sv_tb.DUT) .
+Loading snapshot worklib.apb_i2c_sv_tb:sv .................... Done
+SVSEED default: 1
+xcelium> source /xcelium25.03/tools/xcelium/files/xmsimrc
+xcelium> run
+
+====================================
+       APB TO I2C VERIFICATION      
+====================================
+[100000] RESET RELEASED
+[TEST] Creating APB-I2C Test
+
+================================
+   APB TO I2C VERIFICATION      
+================================
+
+================================
+     ENVIRONMENT STARTED        
+================================
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x2
+Data      : 0xc4
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0x38
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x4
+Data      : 0x43
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x4
+Data      : 0xa8
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0xd3
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x2
+Data      : 0xfc
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x2
+Data      : 0xd4
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x4
+Data      : 0x42
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0xd9
+--------------------------------
+
+[GENERATOR] Transaction Generated
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x4
+Data      : 0x1c
+--------------------------------
+
+[GENERATOR] All transactions generated
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x2
+Data      : 0xc4
+--------------------------------
+[DRIVER] READ DATA = 0x0
+
+[MONITOR] APB READ DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x2
+Data      : 0x0
+--------------------------------
+[SCOREBOARD] PASS: ADDR=2 EXPECTED=0 ACTUAL=0
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0x38
+--------------------------------
+
+[MONITOR] APB WRITE DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0x38
+--------------------------------
+[SCOREBOARD] WRITE MODEL UPDATED: ADDR=1 DATA=38
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x4
+Data      : 0x43
+--------------------------------
+
+[MONITOR] APB WRITE DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x4
+Data      : 0x43
+--------------------------------
+[SCOREBOARD] WRITE OBSERVED: ADDR=4 DATA=43
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x4
+Data      : 0xa8
+--------------------------------
+[DRIVER] READ DATA = 0x0
+
+[MONITOR] APB READ DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x4
+Data      : 0x0
+--------------------------------
+[SCOREBOARD] READ OBSERVED: ADDR=4 DATA=0 (CHECK DEFERRED)
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0xd3
+--------------------------------
+
+[MONITOR] APB WRITE DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0xd3
+--------------------------------
+[SCOREBOARD] WRITE MODEL UPDATED: ADDR=1 DATA=d3
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x2
+Data      : 0xfc
+--------------------------------
+
+[MONITOR] APB WRITE DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x2
+Data      : 0xfc
+--------------------------------
+[SCOREBOARD] WRITE MODEL UPDATED: ADDR=2 DATA=fc
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x2
+Data      : 0xd4
+--------------------------------
+[DRIVER] READ DATA = 0xfc
+
+[MONITOR] APB READ DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x2
+Data      : 0xfc
+--------------------------------
+[SCOREBOARD] PASS: ADDR=2 EXPECTED=fc ACTUAL=fc
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x4
+Data      : 0x42
+--------------------------------
+[DRIVER] READ DATA = 0x42
+
+[MONITOR] APB READ DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation :  READ
+Address   : 0x4
+Data      : 0x42
+--------------------------------
+[SCOREBOARD] READ OBSERVED: ADDR=4 DATA=42 (CHECK DEFERRED)
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0xd9
+--------------------------------
+
+[MONITOR] APB WRITE DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x1
+Data      : 0xd9
+--------------------------------
+[SCOREBOARD] WRITE MODEL UPDATED: ADDR=1 DATA=d9
+[DRIVER] APB Transfer Completed
+
+[DRIVER] Received Transaction
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x4
+Data      : 0x1c
+--------------------------------
+
+[MONITOR] APB WRITE DETECTED
+--------------------------------
+       APB TRANSACTION           
+--------------------------------
+Operation : WRITE
+Address   : 0x4
+Data      : 0x1c
+--------------------------------
+[SCOREBOARD] WRITE OBSERVED: ADDR=4 DATA=1c
+[DRIVER] APB Transfer Completed
+[DRIVER] All APB transactions completed
+
+================================
+    ENVIRONMENT COMPLETED       
+================================
+
+================================
+      SCOREBOARD REPORT         
+================================
+PASS COUNT = 2
+FAIL COUNT = 0
+================================
+
+================================
+       TEST COMPLETED           
+================================
+====================================
+       SIMULATION FINISHED          
+====================================
+Simulation complete via $finish(1) at time 930 NS + 0
+./testbench.sv:139         $finish;
+xcelium> exit
+TOOL:	xrun	25.03-s001: Exiting on Nov 18, 2026 at 06:33:50 EST  (total: 00:00:01)
+Done
