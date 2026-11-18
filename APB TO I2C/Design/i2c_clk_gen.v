@@ -1,92 +1,62 @@
+// ============================================================================
+// File Name   : i2c_clk_gen.v
+// Module Name : i2c_clk_gen (I2C Clock Generator)
+// Description : Divides high-speed system clock (PCLK) down to a slower timing
+//               tick pulse (clk_en) that dictates the speed of the I2C transfer.
+//               Monitors physical SCL feedback to dynamically handle Clock Stretching.
+// ============================================================================
 
-`timescale 1ns/1ps  // Simulation time unit = 1ns and precision = 1ps.
+`timescale 1ns/1ps // Set simulation timescale (1ns unit, 1ps precision)
 
-// Module responsible for generating the clock enable pulse for I2C timing.
-module i2c_clk_gen (
-
-    // ---------------- Input and Output Ports ----------------
-
-    input wire clk,        
-    // System clock input (PCLK).
-
-    input wire rst_n,      
-    // Active-low asynchronous reset.
-
-    output reg clk_en,     
-    // Clock enable pulse sent to the I2C bit controller.
-
-    input wire [15:0] prescale,
-    // 16-bit prescaler value used to divide the system clock.
-
-    input wire scl_out,    
-    // SCL output control signal from the clock generator interface.
-
-    input wire scl_in      
-    // Actual SCL bus level read from the physical I2C bus.
-
+module i2c_clk_gen ( 
+    input  wire        clk,        // System Clock input (e.g., 50MHz APB PCLK)
+    input  wire        rst_n,      // Active-low asynchronous system reset
+    output reg         clk_en,     // Output tick pulse (asserted High for 1 cycle when counter reaches 0)
+    input  wire [15:0] prescale,   // 16-bit clock division factor loaded from PRER register
+    input  wire        scl_out,    // SCL command output driven by master Bit Controller (0=pull low, 1=release)
+    input  wire        scl_in      // Actual physical voltage level sampled back from the SCL pin
 );
 
-    // ---------------- Internal Register ----------------
-
-    reg [15:0] counter;
-    // 16-bit counter used to count down the prescaler value.
-
-    // ---------------- Clock Stretching Detection ----------------
-
-    wire clk_stretch_active = (scl_out == 1'b1) && (scl_in == 1'b0);
-    // Clock stretching is detected when the master releases SCL (scl_out = 1)
-    // but the actual SCL bus remains LOW (scl_in = 0).
-    // This usually means an I2C slave is holding SCL LOW.
-    // The master must wait until the slave releases SCL.
-
     // ========================================================================
-    // CLOCK DIVISION AND TIMING TICK GENERATION BLOCK
-    // Generates periodic clock enable pulses using the prescaler.
+    // Internal Registers and Wire Declarations
     // ========================================================================
+    reg [15:0] counter;            // 16-bit down-counter register to count clock ticks
 
-    always @(posedge clk or negedge rst_n) begin
-    // Execute on every rising edge of clk or falling edge of reset.
+    // ------------------------------------------------------------------------
+    // Clock Stretching Detection Logic:
+    //   If the master releases SCL to float High (scl_out == 1'b1), but the
+    //   sampled SCL pin remains Low (scl_in == 1'b0), an external I2C Slave
+    //   is holding SCL Low to request additional processing time (clock stretching).
+    // ------------------------------------------------------------------------
+    wire clk_stretch_active = (scl_out == 1'b1) && (scl_in == 1'b0); // 1 when stretching active
 
-        if (!rst_n) begin
-        // When reset is LOW, initialize the clock enable output.
-
+    // ------------------------------------------------------------------------
+    // Clock Division & Timing Tick Generation Sequential Process
+    // ------------------------------------------------------------------------
+    always @(posedge clk or negedge rst_n) begin // Triggered on positive clock edge or negative reset edge
+        if(!rst_n) begin // Check for active-low asynchronous reset
+            // Asynchronous reset: clear the down-counter to zero
+            counter <= 16'b0;
+            // De-assert clock enable pulse to zero
             clk_en <= 1'b0;
-            // Keep clock enable LOW during reset.
-
-        end else begin
-        // Normal operation when reset is HIGH.
-
-            if (clk_stretch_active) begin
-            // Check whether the slave is stretching the I2C clock.
-
+        end else begin // Normal clocked operation
+            if (clk_stretch_active) begin // Clock stretching condition detected
+                // Slave is holding SCL low: freeze counter at current value
                 counter <= counter;
-                // Hold the counter at its current value.
-                // No countdown happens while clock stretching is active.
-
+                // Keep clock enable tick Low during stretched periods
                 clk_en <= 1'b0;
-                // Disable the timing pulse until SCL is released.
-
-            end else if (counter == 0) begin
-            // When the counter reaches zero, generate a new timing pulse.
-
+            end else if(counter == 0) begin // Down-counter reached zero
+                // Reload counter with 16-bit prescale factor to start new countdown period
                 counter <= prescale;
-                // Reload the counter with the prescaler value.
-
+                // Assert clk_en for 1 clock cycle to advance the Bit Controller FSM
                 clk_en <= 1'b1;
-                // Generate a one-system-clock-cycle enable pulse.
-
-            end else begin
-            // If the counter is not zero, continue counting down.
-
+            end else begin // Counter is non-zero and no clock stretch active
+                // Decrement counter by 1 towards zero
                 counter <= counter - 16'd1;
-                // Decrement the counter by one on each system clock edge.
-
+                // Maintain clock enable tick Low between reload ticks
                 clk_en <= 1'b0;
-                // Keep clock enable LOW during countdown.
+            end // End counter evaluation if-else
+        end // End reset if-else
+    end // End always sequential process
 
-            end
-        end
-    end
-
-endmodule
-// End of I2C clock generator module.
+endmodule // End of i2c_clk_gen module
